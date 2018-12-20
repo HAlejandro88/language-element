@@ -1,4 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
 
 <dom-module id="language-element">
   <template>
@@ -6,8 +8,26 @@
       :host {
         display: block;
       }
+      ul{
+        display: inline-block;
+      }
+      ul li{
+        display: inline-block;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 10px;
+      }
+      ul li:hover{
+        color: red;
+      }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <ul>
+      <li>
+          <paper-button data-lang="es" on-tap="changeLanguage">Español</paper-button>
+      </li>
+      <li>
+          <paper-button data-lang="en" on-tap="changeLanguage">English</paper-button>
+      </li>
+  </ul>
   </template>
 
   <script>
@@ -23,11 +43,15 @@
       static get is() { return 'language-element'; }
       static get properties() {
         return {
-          prop1: {
+          lang: {
             type: String,
-            value: 'language-element'
+            value: 'en',
+            notify: true
           }
         };
+      }
+      changeLanguage(event) {
+        this.set('lang', event.target.getAttribute('data-lang'));
       }
     }
 
