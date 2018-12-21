@@ -1,5 +1,9 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-item/paper-item.html">
 
 
 <dom-module id="language-element">
@@ -8,26 +12,24 @@
       :host {
         display: block;
       }
-      ul{
-        display: inline-block;
-      }
-      ul li{
-        display: inline-block;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 10px;
-      }
-      ul li:hover{
-        color: red;
-      }
+     paper-item{
+       color: red;
+     }
+     
     </style>
-    <ul>
-      <li>
-          <paper-button data-lang="es" on-tap="changeLanguage">Español</paper-button>
-      </li>
-      <li>
-          <paper-button data-lang="en" on-tap="changeLanguage">English</paper-button>
-      </li>
-  </ul>
+  <iron-ajax
+          id="json"
+          handle-as="json"
+          on-response="_getLanguage"
+          on-error="_errorResponse"
+          debounce-duration="300">
+  </iron-ajax>
+  <paper-dropdown-menu label="idioma" no-animations on-selected-item-changed="_langSelected">
+    <paper-listbox slot="dropdown-content" selected="1" attr-for-selected="data-lang">
+      <paper-item data-lang="es">Español</paper-item>
+      <paper-item data-lang="en">English</paper-item>
+    </paper-listbox>  
+  </paper-dropdown-menu>
   </template>
 
   <script>
@@ -46,12 +48,49 @@
           lang: {
             type: String,
             value: 'en',
-            notify: true
+            observer: '_langChanged'
+          },
+          source:{
+            type: String,
+            value: '',
+            observer: '_requestLanguage'
+          },
+          locales:{
+            type: Object,
+            value: {}
           }
         };
       }
-      changeLanguage(event) {
-        this.set('lang', event.target.getAttribute('data-lang'));
+      _langChange() {
+        this._requestLanguage();
+      }
+      _langSelected(event) {
+        const paperItem = event.detail.value;
+        if (paperItem) {
+          const languageKey = paperItem.getAttribute('data-lang');
+          this.set('lang', languageKey);
+        }
+      }
+      _requestLanguage() {
+                this.$.json.url = `${this.source}/${this.lang}.json`;
+                this.$.json.generateRequest();
+      }
+      _getLanguage() {
+        const response = this.$.json.lastResponse;
+        this.set(['locales', this.lang], response);
+        if (this.locales[this.lang]) {
+          this.dispatchEvent(new CustomEvent('language-changed', {
+            bubbles: false,
+            composed: false,
+            detail: {
+              lang: this.lang,
+              data: this.locales[this.lang]
+            }
+          }));
+        }
+      }
+      _errorResponse() {
+        const error = this.$.json.lastError;
       }
     }
 

@@ -11,6 +11,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../language-element.html">
+    <link rel="import" href="../../paper-toast/paper-toast.html">
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -19,11 +20,19 @@
   </head>
   <body>
     <div class="vertical-section-container centered">
-      <h3>Basic language-element demo</h3>
+      <h3>language-element</h3>
       <demo-snippet>
         <template>
-          <language-element></language-element>
+          <language-element source="locales" lang="es"></language-element>
+          <paper-toast class="fit-button"></paper-toast>
         </template>
+        <script>
+          document.querySelector('language-element').addEventListener('language-changed', event => {
+             const toast = document.querySelector('paper-toast');
+             toast.text = `Idioma seleccionado: ${event.detail.lang}`;
+             toast.show();
+          });
+        </script>
       </demo-snippet>
     </div>
   </body>
