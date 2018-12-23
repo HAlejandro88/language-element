@@ -58,10 +58,16 @@
           locales:{
             type: Object,
             value: {}
+          },
+          saves:{
+            langua:{
+              type:Array,
+              value: ['en','es']
+            }
           }
         };
       }
-      _langChange() {
+      _langChanged() {
         this._requestLanguage();
       }
       _langSelected(event) {
@@ -91,8 +97,18 @@
       }
       _errorResponse() {
         const error = this.$.json.lastError;
+                this.dispatchEvent(new CustomEvent('language-request-error', {
+                    bubbles: false,
+                    composed: false,
+                    detail: {
+                        lang: this.lang,
+                        cache: this.locales,
+                        error: error
+                    }
+                }));
+            }
       }
-    }
+    
 
     window.customElements.define(LanguageElement.is, LanguageElement);
   </script>

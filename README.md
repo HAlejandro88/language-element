@@ -1,5 +1,7 @@
 # \<language-element\>
 
+![Polymer 2 badged](https://img.shields.io/badge/Polymer-2.x-green.svg)
+[![Build Status](https://travis-ci.org/HAlejandro88/language-element.svg?branch=master)](https://travis-ci.org/HAlejandro88/language-element)
 
 
 ## Install the Polymer-CLI

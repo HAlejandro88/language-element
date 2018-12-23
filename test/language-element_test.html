@@ -13,39 +13,48 @@
   </head>
   <body>
 
-    <test-fixture id="BasicTestFixture">
+    <test-fixture id="Basic-change">
       <template>
-        <language-element></language-element>
+        <language-element lang="es" source="locales"></language-element>
       </template>
     </test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
+    <test-fixture id="translate">
       <template>
-        <language-element prop1="new-prop1"></language-element>
+        <language-element lang="es"></language-element>
       </template>
     </test-fixture>
 
     <script>
-      suite('language-element', () => {
-
-        test('instantiating the element with default properties works', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'language-element');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello language-element!');
+     suite('language-element source', () => {
+        test('Should be fired an event if the lang property is modify (to en)', done => {
+            const element = fixture('basic-translate');
+            element.addEventListener('language-changed', event => {
+                assert.strictEqual('en', event.detail.lang);
+                done();
+            });
+            element.set('lang', 'en');
         });
-
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        test('Should be fired an event if the lang property is modify (to es)', done => {
+            const element = fixture('basic-translate');
+            element.addEventListener('language-changed', event => {
+                assert.strictEqual('es', event.detail.lang);
+                done();
+            });
+            element.set('lang', 'es');
         });
+    });
 
-      });
+    suite('language-element without source', () => {
+        test('Should be fired an event if the lang property is modify', done => {
+            const element = fixture('cache-translate');
+            element.addEventListener('language-request-error', event => {
+                assert(event.detail.cache !== undefined);
+                done();
+            });
+            element.set('lang', 'en');
+        });
+    });
     </script>
 
   </body>
