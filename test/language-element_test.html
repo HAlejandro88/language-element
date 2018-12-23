@@ -28,7 +28,7 @@
     <script>
      suite('language-element source', () => {
         test('Should be fired an event if the lang property is modify (to en)', done => {
-            const element = fixture('basic-translate');
+            const element = fixture('Basic-change');
             element.addEventListener('language-changed', event => {
                 assert.strictEqual('en', event.detail.lang);
                 done();
@@ -36,7 +36,7 @@
             element.set('lang', 'en');
         });
         test('Should be fired an event if the lang property is modify (to es)', done => {
-            const element = fixture('basic-translate');
+            const element = fixture('Basic-change');
             element.addEventListener('language-changed', event => {
                 assert.strictEqual('es', event.detail.lang);
                 done();
@@ -47,7 +47,7 @@
 
     suite('language-element without source', () => {
         test('Should be fired an event if the lang property is modify', done => {
-            const element = fixture('cache-translate');
+            const element = fixture('translate');
             element.addEventListener('language-request-error', event => {
                 assert(event.detail.cache !== undefined);
                 done();
