@@ -24,12 +24,14 @@
           on-error="_errorResponse"
           debounce-duration="300">
   </iron-ajax>
-  <paper-dropdown-menu label="idioma" no-animations on-selected-item-changed="_langSelected">
-    <paper-listbox slot="dropdown-content" selected="1" attr-for-selected="data-lang">
-      <paper-item data-lang="es">Español</paper-item>
-      <paper-item data-lang="en">English</paper-item>
-    </paper-listbox>  
-  </paper-dropdown-menu>
+    <template is="dom-if" if="[[visible]]">
+      <paper-dropdown-menu label="idioma" no-animations on-selected-item-changed="_langSelected">
+        <paper-listbox slot="dropdown-content" selected="1" attr-for-selected="data-lang">
+          <paper-item data-lang="es">Español</paper-item>
+          <paper-item data-lang="en">English</paper-item>
+        </paper-listbox>  
+      </paper-dropdown-menu>
+    </template>
   </template>
 
   <script>
@@ -63,9 +65,16 @@
             langua:{
               type:Array,
               value: ['en','es']
-            }
+            },
+            visible:{
+              type:Boolean,
+              value:true
+          }
           }
         };
+      }
+      ready() {
+        super.ready();
       }
       _langChanged() {
         this._requestLanguage();
