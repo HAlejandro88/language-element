@@ -30,7 +30,7 @@
         test('Should be fired an event if the lang property is modify (to en)', done => {
             const element = fixture('Basic-change');
             element.addEventListener('language-changed', event => {
-                assert.strictEqual('en', event.detail.lang);
+                assert.equal('en', event.detail.lang);
                 done();
             });
             element.set('lang', 'en');
@@ -38,7 +38,7 @@
         test('Should be fired an event if the lang property is modify (to es)', done => {
             const element = fixture('Basic-change');
             element.addEventListener('language-changed', event => {
-                assert.strictEqual('es', event.detail.lang);
+                assert.equal('es', event.detail.lang);
                 done();
             });
             element.set('lang', 'es');
